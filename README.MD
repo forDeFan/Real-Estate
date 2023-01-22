@@ -6,10 +6,10 @@ Django/ Vue web app for gathering real estate announces from various web sites i
 
 The app will be build with:
 
-- docker(microservices)
-- Django/DRF as backend (API)
-- Swagger docs for API's
+- docker(microservices), docker-compose for services orchietration
+- Django/DRF as backend (API), Swagger docs for API's
 - Postgres as database for user and user saved links management
+- Gunicorn for serving Django API responses, Nginx for static files and reverse proxy/ security
 - Vue as frontend service
 - Beautiful Soup for web scrapping
 
@@ -38,15 +38,15 @@ $ docker-compose up -d --build
 
 At this point following services availabe:
 
-- Django API at localhost:8000/api
-- Django admin panel available (log in after superuser creation) at localhost:8000/admin
+- Django API at localhost:1337/api/docs
+- Django admin panel available (log in after superuser creation) at localhost:1337/admin
 - Vue frontend service available at localhost:8080
-- PostgresDB operational for user save
+
 <br>
 Currently the app user can interact with the service thru either Vue front end service or Django based API.
 
 For Vue frontend visit: localhost:8080
-For API visit: localhost:8000/api/docs/
+For API visit: localhost:1337/api/docs/
 
 <br>
 
@@ -80,7 +80,7 @@ $ docker-compose run --rm backend sh -c "python manage.py createsuperuser"
 
 Finish user creation on interactive prompt and then you can login in onto service (users can be added, viewed, modified in admin dashboard - by Admin only) - with your credentials at:
 
-<strong>localhost:8000/admin</strong>
+<strong>localhost:1337/admin</strong>
 
 <br>
 
