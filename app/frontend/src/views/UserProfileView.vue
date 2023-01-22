@@ -68,7 +68,7 @@ export default {
         credentials: 'include'
       }
 
-      fetch('http://127.0.0.1:8000/api/user/me/', requestOptions)
+      fetch('http://127.0.0.1:1337/api/user/me/', requestOptions)
         .then(response => response.json())
         // eslint-disable-next-line no-return-assign
         .then(data => {
@@ -84,9 +84,8 @@ export default {
         credentials: 'include'
       }
 
-      fetch('http://127.0.0.1:8000/api/auth/logout/', requestOptions)
-
-      window.location.href = '/#/home'
+      fetch('http://127.0.0.1:1337/api/auth/logout/', requestOptions)
+        .then(window.location.href = '/#/')
     },
     mounted () {
       this.getUserData()

@@ -82,7 +82,7 @@ export default {
         body: JSON.stringify({ name: this.username, email: this.email, password: this.password })
       }
 
-      fetch('http://127.0.0.1:8000/api/user/create/', requestOptions)
+      fetch('http://127.0.0.1:1337/api/user/create/', requestOptions)
         .then(result => result.json())
         .then(window.location.href = '/#/login')
     }
