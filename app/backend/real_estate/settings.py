@@ -187,6 +187,6 @@ SIMPLE_JWT = {
 # CORS policy settings
 CORS_ALLOW_CREDENTIALS = True # For cookies to be sent either way
 CORS_ALLOWED_ORIGINS = [ # To pass the origin thru CORS filter
-    "http://127.0.0.1:8080",
-    "http://localhost:8080"
+    "http://127.0.0.1:80",
+    "http://localhost:80"
 ]

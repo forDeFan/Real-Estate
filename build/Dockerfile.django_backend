@@ -22,3 +22,5 @@ RUN pip install --upgrade pip && \
 
 COPY ./app/backend $WORKDIR
 USER $USER
+
+EXPOSE 8000
