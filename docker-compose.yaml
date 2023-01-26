@@ -19,13 +19,12 @@ services:
     build:
       context: .
       dockerfile: build/Dockerfile.django_backend
+    restart: unless-stopped
     command: >
       sh -c "python manage.py wait_for_db &&
       python manage.py migrate --noinput &&
       python manage.py collectstatic --no-input &&
       gunicorn real_estate.wsgi:application --bind 0.0.0.0:8000"
-    expose:
-      - 8000
     volumes:
       - static_volume:/code/staticfiles
     depends_on:
@@ -38,20 +37,22 @@ services:
     build:
       context: .
       dockerfile: build/Dockerfile.vue_frontend
-    ports:
-      - "8080:8080"
+    restart: unless-stopped
     networks:
       - real_estate_docker_network
 
   nginx:
+    container_name: nginx_proxy_server_real_estate
     build:
       context: .
       dockerfile: build/Dockerfile.nginx_proxy
+    restart: unless-stopped
     ports:
-      - 1337:80
+      - 80:80
     volumes:
       - static_volume:/code/staticfiles
     depends_on:
+      - frontend
       - backend
     networks:
       - real_estate_docker_network

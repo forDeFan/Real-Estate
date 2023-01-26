@@ -1,10 +1,6 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as build-stage
 
 ENV WORKDIR=/code
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
 WORKDIR $WORKDIR
 
 # copy both 'package.json' and 'package-lock.json' (if available)
@@ -17,4 +13,11 @@ COPY app/frontend $WORKDIR
 
 RUN npm run build
 
-CMD [ "http-server", "dist" ]
+# Serve Vue
+FROM nginx:alpine as production-stage
+
+RUN mkdir $WORKDIR
+COPY app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage $WORKDIR/dist $WORKDIR
+
+EXPOSE 8080
