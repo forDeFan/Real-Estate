@@ -9,8 +9,8 @@ The app will be build with:
 - docker(microservices), docker-compose for services orchietration
 - Django/DRF as backend (API), Swagger docs for API's
 - Postgres as database for user and user saved links management
-- Gunicorn for serving Django API responses, Nginx for static files and reverse proxy/ security
-- Vue as frontend service
+- Gunicorn for serving Django API responses, Nginx for Django static files and reverse proxy/ security - combining API and frontend in one proxy service
+- Vue as frontend service, served by Nginx
 - Beautiful Soup for web scrapping
 
 ## Prerequistes:
@@ -25,7 +25,7 @@ The app will be build with:
 $ git clone https://github.com/anniejanuary/Real-Estate.git
 ```
 
-## To run the app (while in project root):
+## To run the app:
 
 1. Create .env (see .env_example) in project root
 2. Start docker-compose to build services
@@ -36,17 +36,17 @@ $ docker-compose up -d --build
 
 ## Interaction with the app:
 
-At this point following services availabe:
+At this point following services availabe (Nginx proxied):
 
-- Django API at localhost:1337/api/docs
-- Django admin panel available (log in after superuser creation) at localhost:1337/admin
-- Vue frontend service available at localhost:8080
+- Django API at localhost:80/api/docs
+- Django admin panel available (log in after superuser creation) at localhost:80/admin
+- Vue frontend service available at localhost:80
 
 <br>
 Currently the app user can interact with the service thru either Vue front end service or Django based API.
 
-For Vue frontend visit: localhost:8080
-For API visit: localhost:1337/api/docs/
+For Vue frontend visit: localhost:80
+For API visit: localhost:80/api/docs/
 
 <br>
 
@@ -80,7 +80,7 @@ $ docker-compose run --rm backend sh -c "python manage.py createsuperuser"
 
 Finish user creation on interactive prompt and then you can login in onto service (users can be added, viewed, modified in admin dashboard - by Admin only) - with your credentials at:
 
-<strong>localhost:1337/admin</strong>
+<strong>localhost:80/admin</strong>
 
 <br>
 
