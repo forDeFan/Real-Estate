@@ -8,6 +8,12 @@ networks:
   real_estate_docker_network:
     name: real_estate_docker_network
     driver: bridge
+    # Static IP in order to Nginx 'allow' directive - to specific IP
+    # To be removed on production
+    ipam:
+      driver: default
+      config:
+      - subnet:  10.103.0.1/16
 
 services:
 
