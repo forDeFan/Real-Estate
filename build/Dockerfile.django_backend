@@ -1,4 +1,4 @@
-# Build from minimal image for speed and security
+# Build from minimal image for speed and security.
 FROM python:3.10.2-slim-bullseye
 
 ENV WORKDIR=/code
@@ -10,17 +10,21 @@ WORKDIR $WORKDIR
 
 COPY build/requirements.txt $WORKDIR
 
-# make static files dirs in order to avoid error from collectstatic
+# Make static files dirs in order to avoid error from collectstatic.
 RUN mkdir $WORKDIR/staticfiles && \
     mkdir $WORKDIR/staticfiles/admin && \
     mkdir $WORKDIR/staticfiles/rest_framework
 
+# Install dependencies.
 RUN pip install --upgrade pip && \ 
     pip install -r requirements.txt && \
     adduser --system --group $USER && \
     chown -R $USER:$USER $WORKDIR
 
 COPY ./app/backend $WORKDIR
+
+# Set user for container on limited privileges.
 USER $USER
 
+# Close the port for host.
 EXPOSE 8000
