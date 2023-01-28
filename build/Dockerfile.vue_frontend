@@ -1,12 +1,13 @@
 FROM node:lts-alpine as build-stage
 
+ENV USER=code
 ENV WORKDIR=/code
 WORKDIR $WORKDIR
 
-# copy both 'package.json' and 'package-lock.json' (if available)
+# Copy both 'package.json' and 'package-lock.json' (if available)
 COPY app/frontend/package*.json $WORKDIR/
 
-# install project dependencies
+# Install project dependencies
 RUN npm install --legacy-peer-deps
 
 COPY app/frontend $WORKDIR
@@ -16,8 +17,13 @@ RUN npm run build
 # Serve Vue
 FROM nginx:alpine as production-stage
 
-RUN mkdir $WORKDIR
+ENV WORKDIR=/code
+WORKDIR $WORKDIR
 COPY app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage $WORKDIR/dist $WORKDIR
 
+# Set user for container on limited privileges.
+USER $USER
+
+# Close the port for host.
 EXPOSE 8080
