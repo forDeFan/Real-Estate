@@ -1,4 +1,4 @@
-# Build from minimal image for speed and security
+# Build from minimal image for speed and security.
 FROM python:3.10.2-slim-bullseye
 
 ENV WORKDIR=/code
@@ -9,10 +9,27 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR $WORKDIR
 
 COPY build/requirements.txt $WORKDIR
+
+# Make static files dirs in order to avoid error from collectstatic.
+RUN mkdir $WORKDIR/staticfiles && \
+    mkdir $WORKDIR/staticfiles/admin && \
+    mkdir $WORKDIR/staticfiles/rest_framework
+
+# Install dependencies.
 RUN pip install --upgrade pip && \ 
     pip install -r requirements.txt && \
     adduser --system --group $USER && \
     chown -R $USER:$USER $WORKDIR
 
 COPY ./app/backend $WORKDIR
+
+# Set user for container on limited privileges.
 USER $USER
+
+# Start Django.
+CMD sh -c "python manage.py wait_for_db && python manage.py migrate --noinput \
+        && python manage.py collectstatic --no-input \
+        && gunicorn real_estate.wsgi:application --bind 0.0.0.0:8000"
+
+# Close the port for host.
+EXPOSE 8000

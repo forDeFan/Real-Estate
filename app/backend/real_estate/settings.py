@@ -131,7 +131,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -186,6 +187,6 @@ SIMPLE_JWT = {
 # CORS policy settings
 CORS_ALLOW_CREDENTIALS = True # For cookies to be sent either way
 CORS_ALLOWED_ORIGINS = [ # To pass the origin thru CORS filter
-    "http://127.0.0.1:8080",
-    "http://localhost:8080",
+    "http://127.0.0.1:80",
+    "http://localhost:80"
 ]

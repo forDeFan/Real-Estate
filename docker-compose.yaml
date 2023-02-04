@@ -2,11 +2,18 @@ version: "3.5"
 
 volumes:
   postgres_data:
+  static_volume:
 
 networks:
   real_estate_docker_network:
     name: real_estate_docker_network
     driver: bridge
+    # Static IP in order to Nginx 'allow' directive - to specific IP
+    # To be removed on production
+    ipam:
+      driver: default
+      config:
+      - subnet:  10.103.0.1/16
 
 services:
 
@@ -18,12 +25,9 @@ services:
     build:
       context: .
       dockerfile: build/Dockerfile.django_backend
-    command: >
-      sh -c "python manage.py wait_for_db &&
-      python manage.py migrate &&
-      python manage.py runserver 0.0.0.0:8000"
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - static_volume:/code/staticfiles
     depends_on:
       - database
     networks:
@@ -34,11 +38,26 @@ services:
     build:
       context: .
       dockerfile: build/Dockerfile.vue_frontend
-    ports:
-      - "8080:8080"
+    restart: unless-stopped
     networks:
       - real_estate_docker_network
 
+  nginx:
+    container_name: nginx_proxy_server_real_estate
+    build:
+      context: .
+      dockerfile: build/Dockerfile.nginx_proxy
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - static_volume:/code/staticfiles
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - real_estate_docker_network
+    
   database:
     container_name: postgres_db_real_estate
     build:
