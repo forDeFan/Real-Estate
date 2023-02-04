@@ -26,5 +26,10 @@ COPY ./app/backend $WORKDIR
 # Set user for container on limited privileges.
 USER $USER
 
+# Start Django.
+CMD sh -c "python manage.py wait_for_db && python manage.py migrate --noinput \
+        && python manage.py collectstatic --no-input \
+        && gunicorn real_estate.wsgi:application --bind 0.0.0.0:8000"
+
 # Close the port for host.
 EXPOSE 8000
