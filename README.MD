@@ -22,7 +22,7 @@ The app will be build with:
 ## Install codebase:
 
 ```
-$ git clone https://github.com/anniejanuary/Real-Estate.git
+$ git clone https://github.com/forDeFan/Real-Estate.git
 ```
 
 ## To run the app:
